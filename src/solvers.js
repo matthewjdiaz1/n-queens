@@ -11,15 +11,44 @@
 // take a look at solversSpec.js to see what the tests are expecting
 
 
-// return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
+// return a matrix (an array of arrays) representing a single nxn chessboard, 
+// with n rooks placed such that none of them can attack each other
 
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  // input = num
+  // output = matrix
+  // edge case = no solution?
+  // if (n === 2 || n === 3) { return null; }
+  
+  // if n is 1
+  if (n === 1) { 
+    var one = new Board({n: 1});
+    one.togglePiece(0,0);
+    console.log(one.rows());
+    return one.rows();
+  }
+  var solution = new Board({n: n}); //fixme
+  solution.togglePiece(0,0);
+  // debugger;
 
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (solution[i][j] !== 1) {
+        solution.togglePiece(i, j);
+      }
+      if (solution.hasAnyRowConflicts() && solutions.hasAnyColConflicts()) {
+        solution.togglePiece(i, j);
+      }
+    }
+  }
+
+  
+  console.log(n);
+  console.log(solution);
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+  return solution.rows();
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
@@ -27,7 +56,7 @@ window.countNRooksSolutions = function(n) {
   var solutionCount = undefined; //fixme
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  return solution;
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
