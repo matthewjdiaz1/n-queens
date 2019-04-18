@@ -21,45 +21,82 @@ window.findNRooksSolution = function(n) {
   // output = matrix
   // edge case = no solution?
   // if (n === 2 || n === 3) { return null; }
-  
-  // if n is 1
-  if (n === 1) { 
-    var one = new Board({n: 1});
-    one.togglePiece(0,0);
-    console.log(one.rows());
-    return one.rows();
-  }
-  var solution = new Board({n: n}); //fixme
-  solution.togglePiece(0,0);
-  // debugger;
+  var piecesOnBoard = 0;
+  var solution = new Board({n: n});
 
+  // for each row
   for (let i = 0; i < n; i++) {
+    // for each col
     for (let j = 0; j < n; j++) {
-      if (solution[i][j] !== 1) {
+      solution.togglePiece(i, j);
+      piecesOnBoard++;
+      // if there are no conflicts
+      if (!solution.hasAnyRowConflicts() && !solution.hasAnyColConflicts()) {
+        // if n pieces are on the board
+        if (piecesOnBoard === n) {
+          // return your solution
+          console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+          return solution.rows();
+        }
+        // else if there are conflicts
+      } else {
+        // toggle piece back to 0 and try next space
         solution.togglePiece(i, j);
-      }
-      if (solution.hasAnyRowConflicts() && solutions.hasAnyColConflicts()) {
-        solution.togglePiece(i, j);
+        piecesOnBoard--;
       }
     }
   }
-
-  
-  console.log(n);
-  console.log(solution);
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution.rows();
 };
 
-// return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
+// return the number of nxn chessboards that exist, with n rooks placed such 
+// that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
-
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solution;
+  var solutionCount = []; // fixme
+  
+  // for each starting position
+  for (let k = 0; k < n*n; k++) {
+    let piecesOnBoard = 0;
+    let solution = new Board({n: n});
+    solution.togglePiece(0, k);
+    piecesOnBoard++;
+    // for each row
+    for (let i = 0; i < n; i++) {
+      // for each col
+      for (let j = 0; j < n; j++) {
+        if (solution.get(i)[j] !== 1){
+          solution.togglePiece(i, j);
+          piecesOnBoard++;
+        }
+        // if there are no conflicts
+        if (!solution.hasAnyRowConflicts() && !solution.hasAnyColConflicts()) {
+          // if n pieces are on the board
+          if (piecesOnBoard === n) {
+            console.log(solution.rows());
+            // return your solution
+            // TODO
+            // check if already in array and push
+            var numberSolution = [];
+            numberSolution.push(solution.rows())            
+            var answer = numberSolution.join("");
+            if(!solutionCount.includes(answer)){
+              solutionCount.push(answer);
+              //console.log(solutionCount);
+            }
+          }
+          // else if there are conflicts
+        } else {
+          // toggle piece back to 0 and try next space
+          solution.togglePiece(i, j);
+          piecesOnBoard--;
+        }
+      }
+    }
+  }
+  return solutionCount.length;
 };
 
-// return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
+// return a matrix (an array of arrays) representing a single nxn chessboard, 
+// with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
   var solution = undefined; //fixme
 
@@ -67,7 +104,8 @@ window.findNQueensSolution = function(n) {
   return solution;
 };
 
-// return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
+// return the number of nxn chessboards that exist, with n queens placed such 
+// that none of them can attack each other
 window.countNQueensSolutions = function(n) {
   var solutionCount = undefined; //fixme
 
